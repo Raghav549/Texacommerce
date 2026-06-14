@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Texacommerce Mobile",
+    "slug": "texacommerce-mobile",
+    "version": "1.0.0",
+    "platforms": ["ios", "android", "web"],
+    "sdkVersion": "51.0.0",
+    "plugins": [],
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
