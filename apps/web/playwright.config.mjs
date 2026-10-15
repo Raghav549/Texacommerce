@@ -12,7 +12,7 @@ export default defineConfig({
     command: 'npm run start -- --hostname 0.0.0.0 --port 3000',
     url: 'http://127.0.0.1:3000/api/health',
     reuseExistingServer: !process.env.CI,
-    env: { AUTH_SECRET: 'test-only-not-a-production-secret', AUTH_TRUST_HOST: 'true', DATABASE_URL: '' },
+    env: { AUTH_SECRET: 'test-only-not-a-production-secret', AUTH_TRUST_HOST: 'true', AUTH_URL: 'http://127.0.0.1:3000', DATABASE_URL: '' },
     timeout: 30000,
   },
 });

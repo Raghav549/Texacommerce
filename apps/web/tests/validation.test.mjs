@@ -16,3 +16,21 @@ test('mutation origin validation', () => {
   assert.equal(sameOrigin(req('https://evil.example')), false);
   assert.equal(sameOrigin(req()), true); // Native/server clients still require an authenticated session.
 });
+test('configured public origin is authoritative behind a proxy and cannot be spoofed', () => {
+  const previous = process.env.AUTH_URL;
+  try {
+    process.env.AUTH_URL = 'https://texa.example';
+    const req = (origin, forwarded = 'evil.example') => new Request('http://0.0.0.0:3000/api/account/recovery', {
+      headers: { origin, 'x-forwarded-host': forwarded, 'x-forwarded-proto': 'https' },
+    });
+    assert.equal(sameOrigin(req('https://texa.example')), true);
+    assert.equal(sameOrigin(req('https://evil.example')), false);
+    assert.equal(sameOrigin(req('http://0.0.0.0:3000')), false);
+    assert.equal(sameOrigin(req('null')), false);
+    process.env.AUTH_URL = 'not a valid URL';
+    assert.equal(sameOrigin(req('https://texa.example')), false);
+  } finally {
+    if (previous === undefined) delete process.env.AUTH_URL;
+    else process.env.AUTH_URL = previous;
+  }
+});

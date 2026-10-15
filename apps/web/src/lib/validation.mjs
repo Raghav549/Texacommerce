@@ -6,5 +6,11 @@ export function validPost(body) {
 }
 export function sameOrigin(request) {
   const origin = request.headers.get('origin');
-  return !origin || origin === new URL(request.url).origin;
+  if (!origin) return true; // Non-browser clients still require authentication on private routes.
+  try {
+    // AUTH_URL is operator-controlled. Never trust arbitrary forwarded-host/origin headers.
+    // Next's internal request URL can differ from the public origin behind a proxy.
+    const expected = new URL(process.env.AUTH_URL || request.url).origin;
+    return expected !== 'null' && origin === expected;
+  } catch { return false; }
 }
