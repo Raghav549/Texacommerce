@@ -28,3 +28,9 @@ Thumbs.db
 .cache/
 
 *.tsbuildinfo
+
+# Safe deployment templates are intentionally tracked.
+!.env.example
+!**/.env.example
+**/test-results/
+**/playwright-report/

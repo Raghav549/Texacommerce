@@ -1,0 +1,7 @@
+'use client';
+import {useState} from 'react';
+import {requestApi} from './SafetyControls';
+export default function RecoveryPanel({token,onDone}){
+ const [busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+ return <><span className="eyebrow">YOUR ACCOUNT, BACK IN YOUR HANDS</span><h2>{token?'Choose a fresh password.':'Let’s get you back in.'}</h2><p>{token?'This link expires after 30 minutes and can be used only once.':'Enter your email to request a secure reset link.'}</p><form className="auth-form" onSubmit={async e=>{e.preventDefault();const form=new FormData(e.currentTarget);setBusy(true);setError('');setNotice('');try{const data=await requestApi('account/recovery','POST',token?{action:'reset',token,password:form.get('password')}:{action:'request',email:form.get('email')});setNotice(data.message);if(token)onDone();}catch(e){setError(e.message);}finally{setBusy(false);}}}>{token?<label>New password<input required name="password" type="password" minLength={12} maxLength={128} autoComplete="new-password"/></label>:<label>Email address<input required name="email" type="email" maxLength={254} autoComplete="email"/></label>}{error&&<p className="form-error" role="alert">{error}</p>}{notice&&<p role="status">{notice}</p>}<button disabled={busy} className="primary">{busy?'One moment…':token?'Reset password':'Send reset link'}</button></form></>;
+}

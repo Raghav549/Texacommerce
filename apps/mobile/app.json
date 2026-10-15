@@ -1,13 +1,24 @@
 {
   "expo": {
-    "name": "Texacommerce Mobile",
+    "name": "Texa",
     "slug": "texacommerce-mobile",
     "version": "1.0.0",
-    "platforms": ["ios", "android", "web"],
-    "sdkVersion": "51.0.0",
-    "plugins": [],
-    "web": {
-      "bundler": "metro"
-    }
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "android": {
+      "package": "com.texacommerce.app",
+      "versionCode": 1,
+      "permissions": [],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "plugins": [
+      "expo-status-bar"
+    ]
   }
 }
