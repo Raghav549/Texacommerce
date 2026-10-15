@@ -1,0 +1,22 @@
+BEGIN;
+CREATE TABLE IF NOT EXISTS tx_accounts (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  email TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS tx_posts (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  author_id BIGINT NOT NULL REFERENCES tx_accounts(id) ON DELETE CASCADE,
+  body TEXT NOT NULL CHECK (char_length(body) BETWEEN 1 AND 2000),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS tx_posts_created_idx ON tx_posts(created_at DESC);
+COMMIT;
+CREATE TABLE IF NOT EXISTS tx_rate_limits (
+  key TEXT PRIMARY KEY,
+  attempts INTEGER NOT NULL,
+  expires_at TIMESTAMPTZ NOT NULL
+);
+CREATE INDEX IF NOT EXISTS tx_rate_limits_expiry_idx ON tx_rate_limits(expires_at);
