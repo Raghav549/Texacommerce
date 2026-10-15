@@ -7,7 +7,7 @@ if (process.env.USE_PACKAGED_CHROMIUM === '1') {
 export default defineConfig({
   testDir: './tests/browser',
   use: { baseURL: process.env.TEST_BASE_URL || 'http://127.0.0.1:3000', launchOptions, headless: true },
-  reporter: 'list', workers: 1,
+  reporter: process.env.CI ? [['github'], ['list']] : [['list']], workers: 1,
   webServer: {
     command: 'npm run start -- --hostname 0.0.0.0 --port 3000',
     url: 'http://127.0.0.1:3000/api/health',
